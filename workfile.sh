@@ -28,7 +28,7 @@ aws ec2 run-instances --image-id ami-0f9fc25dd2506cf6d --instance-type t2.micro 
 #
 #
 #CODE FOR WEB SERVER
-sleep 30;
+sleep 300;
 # script will be running 10 minutes
 instanceid=$(jq -r '.Instances[0].InstanceId' logs.json);
 imageid=$(aws ec2 create-image --instance-id $instanceid --name NewAMIforclitask1awsadvanced123 --no-reboot | jq -r '.ImageId';)
