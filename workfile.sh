@@ -49,6 +49,7 @@ sgid2=$(aws ec2 create-security-group --description newsgforcli --group-name New
 # HERE YOU SHOULD ADD HTTP 80 poer and 22
 newimageid3=$(aws ec2 copy-image --source-image-id $imageid --source-region us-east-1 --region us-east-2 --name "ami-NewAMIforclitask1awsadvanced1234" | jq -r '.ImageId');
 echo $newimageid3;
-sleep 120;
+echo "Script will wait 20 min for image to be burned";
+sleep 1200;
 subnetid2=$(aws ec2 describe-subnets | jq -r '.Subnets[0].SubnetId');
 aws ec2 run-instances --image-id $newimageid2 --instance-type t2.micro --count 1 --subnet-id $subnetid2 --security-group-ids $sgid2 --key-name MyKeyPair2 > logs2.json;
