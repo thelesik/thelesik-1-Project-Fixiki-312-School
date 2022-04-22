@@ -1,8 +1,8 @@
-aws_access_key_id=""
-aws_secret_access_key=""
-aws_output_format="json"
-region1="us-east-1"
-region2="us-east-2"
+aws_access_key_id="";
+aws_secret_access_key="";
+aws_output_format="json";
+region1="us-east-1";
+region2="us-east-2";
 aws configure set aws_access_key_id $aws_access_key_id;
 aws configure set aws_secret_access_key $aws_secret_access_key;
 aws configure set default.region $region1;
@@ -17,7 +17,7 @@ sgid=$(aws ec2 create-security-group --description newsgforcli --group-name News
 #
 
 subnetid=$(aws ec2 describe-subnets | jq -r '.Subnets[1].SubnetId');
-aws ec2 run-instances --image-id ami-0f9fc25dd2506cf6d --instance-type t2.nano --count 1 --subnet-id $subnetid --security-group-ids $sgid --key-name MyKeyPair > logs.json;
+aws ec2 run-instances --image-id ami-0f9fc25dd2506cf6d --instance-type t2.micro --count 1 --subnet-id $subnetid --security-group-ids $sgid --key-name MyKeyPair > logs.json;
 
 #
 #
@@ -31,9 +31,9 @@ aws ec2 run-instances --image-id ami-0f9fc25dd2506cf6d --instance-type t2.nano -
 sleep 30;
 # script will be running 10 minutes
 instanceid=$(jq -r '.Instances[0].InstanceId' logs.json);
-imageid=$(aws ec2 create-image --instance-id $instanceid --name NewAMIforclitask1awsadvanced123 | jq -r '.ImageId';)
+imageid=$(aws ec2 create-image --instance-id $instanceid --name NewAMIforclitask1awsadvanced123 --no-reboot | jq -r '.ImageId';)
 echo $imageid;
-newimageid2=$(aws ec2 copy-image --source-image-id $imageid --source-region us-east-1 --region us-east-2 --name "ami-NewAMIforclitask1awsadvanced1234");
+newimageid2=$(aws ec2 copy-image --source-image-id $imageid --source-region us-east-1 --region us-east-2 --name "ami-NewAMIforclitask1awsadvanced1234" -- no-encrypted);
 echo $newimageid2;
 
 # 2nd part creation of new instance on another region
@@ -47,8 +47,8 @@ chmod 400 MyKeyPair2.pem;
 sgid2=$(aws ec2 create-security-group --description newsgforcli --group-name NewsgGroup12 | jq -r '.GroupId');
 #
 # HERE YOU SHOULD ADD HTTP 80 poer and 22
-newimageid3=$(aws ec2 copy-image --source-image-id $imageid --source-region us-east-1 --region us-east-2 --name "ami-NewAMIforclitask1awsadvanced1234");
+newimageid3=$(aws ec2 copy-image --source-image-id $imageid --source-region us-east-1 --region us-east-2 --name "ami-NewAMIforclitask1awsadvanced1234" | jq -r '.ImageId');
 echo $newimageid3;
-sleep 15;
+sleep 120;
 subnetid2=$(aws ec2 describe-subnets | jq -r '.Subnets[0].SubnetId');
 aws ec2 run-instances --image-id $newimageid2 --instance-type t2.micro --count 1 --subnet-id $subnetid2 --security-group-ids $sgid2 --key-name MyKeyPair2 > logs2.json;
