@@ -22,3 +22,4 @@ aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text
 chmod 400 MyKeyPair.pem;
 aws ec2 create-security-group --group-name NewsgGroup12; #need to find id of thias SG:
 ec2 run-instances --image-id ami-0f9fc25dd2506cf6d --instance-type t2.nano --count 1 --subnet-id us-east-1a --security-group-ids  --key-name <name of key value pair>
+.
