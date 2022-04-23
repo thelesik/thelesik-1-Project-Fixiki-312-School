@@ -11,8 +11,13 @@ aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text
 chmod 400 MyKeyPair.pem;
 sgid=$(aws ec2 create-security-group --description newsgforcli --group-name NewsgGroup12 | jq -r '.GroupId');
 #
-# HERE YOU SHOULD ADD HTTP 80 poer and SSh 22 port
-#
+aws ec2 modify-security-group-rules  --group-id $sgid --security-group-rules SecurityGroupRuleId=$sgid,SecurityGroupRule={Description=test,IpProtocol=HTTP,CidrIpv4=0.0.0.0/0} --security-group-rules SecurityGroupRuleId=$sgid,SecurityGroupRule={Description=test,IpProtocol=SSH,CidrIpv4=0.0.0.0/0};
+USERNAME=ec2-user
+HOSTS="host1 host2"
+SCRIPT="sudo amazon-linux-extras install nginx1; systemctl start nginx; systemctl enable ngnix; exit"
+for HOSTNAME in ${HOSTS} ; do
+    ssh -o StrictHostKeyChecking=no -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
+done
 #
 #
 
