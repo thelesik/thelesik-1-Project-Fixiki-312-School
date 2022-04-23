@@ -1,5 +1,5 @@
-aws_access_key_id=""
-aws_secret_access_key=""
+aws_access_key_id="AKIAVZGV6CUEXTI7HV5R"
+aws_secret_access_key="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"
 aws_output_format="json"
 region1="us-east-1"
 region2="us-east-2"
@@ -57,6 +57,8 @@ aws configure set output $aws_output_format;
 aws ec2 create-key-pair --key-name MyKeyPair2 --query 'KeyMaterial' --output text > MyKeyPair2.pem;
 chmod 1200 MyKeyPair2.pem;
 sgid2=$(aws ec2 create-security-group --description newsgforcli --group-name NewsgGroup12 | jq -r '.GroupId');
+
+
 
 aws ec2 authorize-security-group-ingress --group-id $sgid2 --protocol tcp --port 22 --cidr 0.0.0.0/0;
 aws ec2 authorize-security-group-ingress --group-id $sgid2 --protocol tcp --port 80 --cidr 0.0.0.0/0;
